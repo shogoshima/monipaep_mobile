@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monipaep_mobile/models/models.dart';
@@ -114,12 +112,7 @@ class _SymptomsSelectionScreenState
                                 .map(
                                   (symptom) => CheckboxListTile(
                                     title: Text(symptom.name),
-                                    subtitle: Text(
-                                      symptom.description,
-                                      style: const TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
+                                    subtitle: Text(symptom.description),
                                     value: selectedSymptoms.any(
                                       (c) => c.id == symptom.id,
                                     ),
@@ -159,12 +152,13 @@ class _SymptomsSelectionScreenState
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               onPressed: () {
-                log('Sintomas selecionados: $selectedSymptoms');
-                ref
-                    .read(profileProvider.notifier)
-                    .evaluate(
-                      selectedSymptoms.map((symptom) => symptom.id).toList(),
-                    );
+                showConfirmDialog(context, selectedSymptoms, () {
+                  ref
+                      .read(profileProvider.notifier)
+                      .evaluate(
+                        selectedSymptoms.map((symptom) => symptom.id).toList(),
+                      );
+                });
               },
               child: const Text('Salvar'),
             ),
@@ -173,4 +167,60 @@ class _SymptomsSelectionScreenState
       ),
     );
   }
+}
+
+Future<void> showConfirmDialog(
+  BuildContext context,
+  List<Symptom> selectedSymptoms,
+  VoidCallback onConfirm,
+) async {
+  return showDialog<void>(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Confirmar sintomas',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              style: TextStyle(fontStyle: FontStyle.italic),
+              'Caso precisemos de mais informações, você será redirecionado para o nosso chat',
+            ),
+            SizedBox(height: 10),
+            ...selectedSymptoms.map(
+              (e) => Text(
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                e.name,
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment:
+                MainAxisAlignment
+                    .spaceBetween, // Distribute space between buttons
+            children: <Widget>[
+              TextButton(
+                child: const Text('Cancelar'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onConfirm();
+                },
+                child: const Text('Enviar'),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -14,20 +14,41 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _currentPageIndex = 0;
+  final PageController _pageController = PageController();
   final List<String> _titles = ['Home', 'Minha Saúde', 'Minha Conta'];
-  void _onDestinationSelected(int index) {
-    setState(() {
-      _currentPageIndex = index;
-    });
-  }
 
   bool wideScreen = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final double width = MediaQuery.of(context).size.width;
     wideScreen = width > 600;
+  }
+
+  void _onDestinationSelected(int index) {
+    setState(() {
+      _currentPageIndex = index;
+    });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  // When the user swipes, update the selected index
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentPageIndex = index;
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,16 +79,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               onDestinationSelected: _onDestinationSelected,
             ),
           Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child:
-                    const <Widget>[
-                      DashboardScreen(),
-                      HealthScreen(),
-                      AccountScreen(),
-                    ][_currentPageIndex],
-              ),
+            // Directly use the PageView to manage the pages.
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              physics: const ClampingScrollPhysics(),
+              children: const [
+                DashboardScreen(),
+                HealthScreen(),
+                AccountScreen(),
+              ],
             ),
           ),
         ],

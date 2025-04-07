@@ -12,6 +12,12 @@ class OccurrenceReminder extends ConsumerWidget {
     final AsyncValue<List<SymptomOccurrence>> occurrences = ref.watch(
       occurrenceProvider,
     );
+    final daysSinceUpdate =
+        DateTime.now()
+            .difference(
+              occurrences.value?.first.registeredDate ?? DateTime.now(),
+            )
+            .inDays;
     return Column(
       children: [
         Card(
@@ -73,7 +79,7 @@ class OccurrenceReminder extends ConsumerWidget {
                 children: [
                   TextSpan(
                     text:
-                        '${occurrences.value?[0].registeredDate.difference(DateTime.now()).inDays} dias',
+                        '$daysSinceUpdate ${daysSinceUpdate == 1 ? 'dia' : 'dias'}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

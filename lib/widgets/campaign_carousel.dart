@@ -14,8 +14,8 @@ class CampaignCarousel extends StatefulWidget {
 }
 
 class _CampaignCarouselState extends State<CampaignCarousel> {
-  final CarouselController _controller = CarouselController(initialItem: 1);
-  
+  final CarouselController _controller = CarouselController(initialItem: 0);
+
   @override
   void dispose() {
     _controller.dispose();
@@ -24,27 +24,24 @@ class _CampaignCarouselState extends State<CampaignCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.sizeOf(context).height;
-
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: height * 2 / 5),
-      child: CarouselView.weighted(
+      constraints: BoxConstraints(maxHeight: 350),
+      child: CarouselView(
         controller: _controller,
         itemSnapping: true,
-        flexWeights: const <int>[1, 7, 1],
-        children:
-            campaigns.map((String campaign) {
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: NetworkImage(campaign),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            }).toList(),
+        itemExtent: 300,
+        children: List<Widget>.generate(campaigns.length, (int index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                image: NetworkImage(campaigns[index]),
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

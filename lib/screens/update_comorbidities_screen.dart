@@ -51,12 +51,7 @@ class _UpdateComorbiditiesScreenState
                             .map(
                               (comorbidity) => CheckboxListTile(
                                 title: Text(comorbidity.name),
-                                subtitle: Text(
-                                  comorbidity.description,
-                                  style: const TextStyle(
-                                    fontStyle: FontStyle.italic
-                                  ),
-                                ),
+                                subtitle: Text(comorbidity.description),
                                 value: selectedComorbidities.any(
                                   (c) => c.id == comorbidity.id,
                                 ),
