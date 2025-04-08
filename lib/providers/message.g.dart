@@ -6,7 +6,7 @@ part of 'message.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messageHash() => r'1128cb5a0c7918eddcda874f716aca823cd4f15c';
+String _$messageHash() => r'945405c4b39c39d61e2750beefea7b3ae4264741';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,9 +31,9 @@ class _SystemHash {
 
 abstract class _$Message
     extends BuildlessAutoDisposeAsyncNotifier<List<ChatMessage>> {
-  late final String? symptomOccurrenceId;
+  late final String symptomOccurrenceId;
 
-  FutureOr<List<ChatMessage>> build(String? symptomOccurrenceId);
+  FutureOr<List<ChatMessage>> build(String symptomOccurrenceId);
 }
 
 /// See also [Message].
@@ -46,7 +46,7 @@ class MessageFamily extends Family<AsyncValue<List<ChatMessage>>> {
   const MessageFamily();
 
   /// See also [Message].
-  MessageProvider call(String? symptomOccurrenceId) {
+  MessageProvider call(String symptomOccurrenceId) {
     return MessageProvider(symptomOccurrenceId);
   }
 
@@ -74,7 +74,7 @@ class MessageFamily extends Family<AsyncValue<List<ChatMessage>>> {
 class MessageProvider
     extends AutoDisposeAsyncNotifierProviderImpl<Message, List<ChatMessage>> {
   /// See also [Message].
-  MessageProvider(String? symptomOccurrenceId)
+  MessageProvider(String symptomOccurrenceId)
     : this._internal(
         () => Message()..symptomOccurrenceId = symptomOccurrenceId,
         from: messageProvider,
@@ -98,7 +98,7 @@ class MessageProvider
     required this.symptomOccurrenceId,
   }) : super.internal();
 
-  final String? symptomOccurrenceId;
+  final String symptomOccurrenceId;
 
   @override
   FutureOr<List<ChatMessage>> runNotifierBuild(covariant Message notifier) {
@@ -146,7 +146,7 @@ class MessageProvider
 // ignore: unused_element
 mixin MessageRef on AutoDisposeAsyncNotifierProviderRef<List<ChatMessage>> {
   /// The parameter `symptomOccurrenceId` of this provider.
-  String? get symptomOccurrenceId;
+  String get symptomOccurrenceId;
 }
 
 class _MessageProviderElement
@@ -155,7 +155,7 @@ class _MessageProviderElement
   _MessageProviderElement(super.provider);
 
   @override
-  String? get symptomOccurrenceId =>
+  String get symptomOccurrenceId =>
       (origin as MessageProvider).symptomOccurrenceId;
 }
 

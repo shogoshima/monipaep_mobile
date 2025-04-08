@@ -10,15 +10,11 @@ part 'message.g.dart';
 
 @riverpod
 class Message extends _$Message {
-  late String? _symptomOccurrenceId;
+  late String _symptomOccurrenceId;
 
   @override
-  Future<List<ChatMessage>> build(String? symptomOccurrenceId) async {
+  Future<List<ChatMessage>> build(String symptomOccurrenceId) async {
     _symptomOccurrenceId = symptomOccurrenceId; // Store it internally
-
-    if (_symptomOccurrenceId == null) {
-      return [];
-    }
 
     final apiClient = ref.watch(apiClientProvider);
     final json = await apiClient.get('${ApiRoutes.chat}/$symptomOccurrenceId');

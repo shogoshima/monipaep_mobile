@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 // Necessary for code-generation to work
 part 'api_client.g.dart';
 
-const String baseUrl = 'http://192.168.15.6:3333';
+const String baseUrl = 'http://10.0.2.2:3333';
 
 class ApiRoutes {
   static String signup = '/patients/signup';
@@ -16,7 +16,7 @@ class ApiRoutes {
   static String alter = '/patients/alter';
 
   static String chat = '/chat';
-  static String evaluate = '/chat/evalue';
+  static String analysis = '/chat/analysis';
 
   static String symptom = '/symptom';
   static String comorbidities = '/comorbidity';

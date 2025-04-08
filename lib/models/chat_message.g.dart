@@ -8,7 +8,7 @@ part of 'chat_message.dart';
 
 _ChatMessage _$ChatMessageFromJson(Map<String, dynamic> json) => _ChatMessage(
   id: json['id'] as String,
-  symptomOccurrenceId: json['symptomOccurrenceId'] as String?,
+  symptomOccurrenceId: json['symptomOccurrenceId'] as String,
   role: json['role'] as String,
   message: json['message'] as String,
   createdAt: DateTime.parse(json['createdAt'] as String),

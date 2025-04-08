@@ -28,14 +28,4 @@ class Profile extends _$Profile {
     Patient patient = Patient.fromJson(json['patient']);
     state = AsyncData(patient);
   }
-
-  Future<void> evaluate(List<String> symptomsIds) async {
-    final apiClient = ref.read(apiClientProvider);
-
-    final json = await apiClient.post(ApiRoutes.evaluate, {
-      'symptomIds': symptomsIds,
-    });
-
-    final probableDiseases = json['probableDiseases'];
-  }
 }

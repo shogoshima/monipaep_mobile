@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monipaep_mobile/models/models.dart';
-import 'package:monipaep_mobile/providers/profile.dart';
+import 'package:monipaep_mobile/providers/occurrence.dart';
 import 'package:monipaep_mobile/providers/symptom_list.dart';
+import 'package:diacritic/diacritic.dart';
+import 'package:monipaep_mobile/screens/chat_screen.dart';
 
 class SymptomsSelectionScreen extends ConsumerStatefulWidget {
   const SymptomsSelectionScreen({super.key});
@@ -56,19 +58,22 @@ class _SymptomsSelectionScreenState
                           );
                         },
                         suggestionsBuilder: (context, controller) {
-                          // Convert the search text to lower case for case insensitive matching.
-                          final query = controller.text.toLowerCase();
+                          // Convert the search text to lower case
+                          // and remove accents and diacritical signs
+                          final query = removeDiacritics(
+                            controller.text.toLowerCase(),
+                          );
                           // Filter the symptoms where either the name or description contains the query.
                           final suggestions =
                               value
                                   .where(
                                     (symptom) =>
-                                        symptom.name.toLowerCase().contains(
-                                          query,
-                                        ) ||
-                                        symptom.description
-                                            .toLowerCase()
-                                            .contains(query),
+                                        removeDiacritics(
+                                          symptom.name.toLowerCase(),
+                                        ).contains(query) ||
+                                        removeDiacritics(
+                                          symptom.description.toLowerCase(),
+                                        ).contains(query),
                                   )
                                   .toList();
 
@@ -151,14 +156,30 @@ class _SymptomsSelectionScreenState
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              onPressed: () {
-                showConfirmDialog(context, selectedSymptoms, () {
-                  ref
-                      .read(profileProvider.notifier)
-                      .evaluate(
-                        selectedSymptoms.map((symptom) => symptom.id).toList(),
+              onPressed: () async {
+                if (selectedSymptoms.isNotEmpty) {
+                  showConfirmDialog(context, selectedSymptoms, () async {
+                    final occurrenceId = await ref
+                        .read(occurrenceProvider.notifier)
+                        .analysis(
+                          selectedSymptoms
+                              .map((symptom) => symptom.id)
+                              .toList(),
+                        );
+
+                    if (!context.mounted) return;
+                    if (occurrenceId != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  ChatScreen(symptomOccurrenceId: occurrenceId),
+                        ),
                       );
-                });
+                    }
+                  });
+                }
               },
               child: const Text('Salvar'),
             ),
@@ -212,7 +233,8 @@ Future<void> showConfirmDialog(
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                   onConfirm();
                 },
                 child: const Text('Enviar'),

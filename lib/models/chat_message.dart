@@ -7,7 +7,7 @@ part 'chat_message.g.dart';
 abstract class ChatMessage with _$ChatMessage {
   const factory ChatMessage({
     required String id,
-    String? symptomOccurrenceId,
+    required String symptomOccurrenceId,
     required String role,
     required String message,
     required DateTime createdAt,

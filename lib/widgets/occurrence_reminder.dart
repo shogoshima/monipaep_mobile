@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:monipaep_mobile/common/date_formatter.dart';
+import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/occurrence.dart';
 
@@ -13,11 +13,11 @@ class OccurrenceReminder extends ConsumerWidget {
       occurrenceProvider,
     );
     final daysSinceUpdate =
-        DateTime.now()
-            .difference(
-              occurrences.value?.first.registeredDate ?? DateTime.now(),
-            )
-            .inDays;
+        occurrences.value?.isNotEmpty == true
+            ? DateTime.now()
+                .difference(occurrences.value!.first.registeredDate)
+                .inDays
+            : 0;
     return Column(
       children: [
         Card(
@@ -45,7 +45,9 @@ class OccurrenceReminder extends ConsumerWidget {
                                     title: Text(
                                       occurrence.symptoms.isEmpty
                                           ? 'Sem sintomas'
-                                          : occurrence.symptoms.join(', '),
+                                          : occurrence.symptoms
+                                              .map((symptom) => symptom.name)
+                                              .join(', '),
                                     ),
                                     subtitle: Text(
                                       'Registrado em ${dateFormatter(occurrence.registeredDate)}',

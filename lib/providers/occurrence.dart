@@ -1,5 +1,7 @@
-import 'package:monipaep_mobile/models/symptom_occurrence.dart';
+import 'package:monipaep_mobile/common/formatter.dart';
+import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/api_client.dart';
+import 'package:monipaep_mobile/providers/message.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'occurrence.g.dart';
@@ -33,5 +35,29 @@ class Occurrence extends _$Occurrence {
     state = await AsyncValue.guard(() async {
       return await build();
     });
+  }
+
+  Future<String?> analysis(List<String> symptomsIds) async {
+    final apiClient = ref.read(apiClientProvider);
+
+    final json = await apiClient.post(ApiRoutes.analysis, {
+      'symptomIds': symptomsIds,
+    });
+
+    final SymptomOccurrence symptomOccurrence = SymptomOccurrence.fromJson(
+      json['symptomOccurrence'],
+    );
+
+    state = AsyncData([symptomOccurrence, ...state.value ?? []]);
+
+    if (symptomOccurrence.chat) {
+      ref
+          .read(messageProvider(symptomOccurrence.id).notifier)
+          .sendMessage(symptomFormatter(symptomOccurrence.symptoms));
+
+      return symptomOccurrence.id;
+    }
+
+    return null;
   }
 }

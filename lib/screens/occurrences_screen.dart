@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:monipaep_mobile/common/date_formatter.dart';
+import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/occurrence.dart';
 import 'package:monipaep_mobile/screens/chat_screen.dart';
@@ -93,7 +93,9 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
                               title: Text(
                                 occurrence.symptoms.isEmpty
                                     ? 'sem sintomas'
-                                    : occurrence.symptoms.join(', '),
+                                    : occurrence.symptoms
+                                        .map((symptom) => symptom.name)
+                                        .join(', '),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -102,7 +104,9 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
                                 children: [
                                   if (occurrence.symptoms.isNotEmpty)
                                     Text(
-                                      'Observações: ${occurrence.remarks}',
+                                      occurrence.remarks != null
+                                          ? 'Observações: ${occurrence.remarks}'
+                                          : 'Não existem observações',
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -120,34 +124,36 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
                               ),
                               // Only allow navigation when not in edit mode
                               onTap:
-                                  _editMode
-                                      ? () {
-                                        setState(() {
-                                          if (isSelected) {
-                                            _selectedOccurrenceIds.remove(
-                                              occurrence.id,
-                                            );
-                                          } else {
-                                            _selectedOccurrenceIds.add(
-                                              occurrence.id,
+                                  occurrence.chat
+                                      ? _editMode
+                                          ? () {
+                                            setState(() {
+                                              if (isSelected) {
+                                                _selectedOccurrenceIds.remove(
+                                                  occurrence.id,
+                                                );
+                                              } else {
+                                                _selectedOccurrenceIds.add(
+                                                  occurrence.id,
+                                                );
+                                              }
+                                            });
+                                          }
+                                          : () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (context) => ChatScreen(
+                                                      symptomOccurrenceId:
+                                                          occurrence.id,
+                                                    ),
+                                              ),
                                             );
                                           }
-                                        });
-                                      }
-                                      : () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder:
-                                                (context) => ChatScreen(
-                                                  symptomOccurrenceId:
-                                                      occurrence.id,
-                                                ),
-                                          ),
-                                        );
-                                      },
+                                      : null,
                               trailing:
-                                  !_editMode
+                                  !_editMode && occurrence.chat
                                       ? const Icon(Icons.arrow_forward)
                                       : null,
                             ),

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatMessage {
 
- String get id; String? get symptomOccurrenceId; String get role; String get message; DateTime get createdAt;
+ String get id; String get symptomOccurrenceId; String get role; String get message; DateTime get createdAt;
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $ChatMessageCopyWith<$Res>  {
   factory $ChatMessageCopyWith(ChatMessage value, $Res Function(ChatMessage) _then) = _$ChatMessageCopyWithImpl;
 @useResult
 $Res call({
- String id, String? symptomOccurrenceId, String role, String message, DateTime createdAt
+ String id, String symptomOccurrenceId, String role, String message, DateTime createdAt
 });
 
 
@@ -66,11 +66,11 @@ class _$ChatMessageCopyWithImpl<$Res>
 
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? symptomOccurrenceId = freezed,Object? role = null,Object? message = null,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? symptomOccurrenceId = null,Object? role = null,Object? message = null,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,symptomOccurrenceId: freezed == symptomOccurrenceId ? _self.symptomOccurrenceId : symptomOccurrenceId // ignore: cast_nullable_to_non_nullable
-as String?,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String,symptomOccurrenceId: null == symptomOccurrenceId ? _self.symptomOccurrenceId : symptomOccurrenceId // ignore: cast_nullable_to_non_nullable
+as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
@@ -84,11 +84,11 @@ as DateTime,
 @JsonSerializable()
 
 class _ChatMessage implements ChatMessage {
-  const _ChatMessage({required this.id, this.symptomOccurrenceId, required this.role, required this.message, required this.createdAt});
+  const _ChatMessage({required this.id, required this.symptomOccurrenceId, required this.role, required this.message, required this.createdAt});
   factory _ChatMessage.fromJson(Map<String, dynamic> json) => _$ChatMessageFromJson(json);
 
 @override final  String id;
-@override final  String? symptomOccurrenceId;
+@override final  String symptomOccurrenceId;
 @override final  String role;
 @override final  String message;
 @override final  DateTime createdAt;
@@ -126,7 +126,7 @@ abstract mixin class _$ChatMessageCopyWith<$Res> implements $ChatMessageCopyWith
   factory _$ChatMessageCopyWith(_ChatMessage value, $Res Function(_ChatMessage) _then) = __$ChatMessageCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? symptomOccurrenceId, String role, String message, DateTime createdAt
+ String id, String symptomOccurrenceId, String role, String message, DateTime createdAt
 });
 
 
@@ -143,11 +143,11 @@ class __$ChatMessageCopyWithImpl<$Res>
 
 /// Create a copy of ChatMessage
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? symptomOccurrenceId = freezed,Object? role = null,Object? message = null,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? symptomOccurrenceId = null,Object? role = null,Object? message = null,Object? createdAt = null,}) {
   return _then(_ChatMessage(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,symptomOccurrenceId: freezed == symptomOccurrenceId ? _self.symptomOccurrenceId : symptomOccurrenceId // ignore: cast_nullable_to_non_nullable
-as String?,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String,symptomOccurrenceId: null == symptomOccurrenceId ? _self.symptomOccurrenceId : symptomOccurrenceId // ignore: cast_nullable_to_non_nullable
+as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,

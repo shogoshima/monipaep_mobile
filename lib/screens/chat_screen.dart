@@ -6,9 +6,9 @@ import 'package:monipaep_mobile/models/chat_message.dart';
 import 'package:monipaep_mobile/providers/message.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
-  final String? symptomOccurrenceId;
+  final String symptomOccurrenceId;
 
-  const ChatScreen({super.key, this.symptomOccurrenceId});
+  const ChatScreen({super.key, required this.symptomOccurrenceId});
 
   @override
   ConsumerState<ChatScreen> createState() => _ChatScreenState();
@@ -16,12 +16,10 @@ class ChatScreen extends ConsumerStatefulWidget {
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _user = const types.User(id: 'user');
-  String? symptomOccurrenceId;
 
   @override
   void initState() {
     super.initState();
-    symptomOccurrenceId = widget.symptomOccurrenceId;
   }
 
   types.TextMessage _formatMessage(ChatMessage chatMessage) {
@@ -36,7 +34,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<ChatMessage>> chatMessage = ref.watch(
-      messageProvider(symptomOccurrenceId),
+      messageProvider(widget.symptomOccurrenceId),
     );
     return Scaffold(
       appBar: AppBar(title: Text('Registro de Sintomas')),
@@ -53,11 +51,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               }
 
               ref
-                  .read(messageProvider(symptomOccurrenceId).notifier)
+                  .read(messageProvider(widget.symptomOccurrenceId).notifier)
                   .addMessage(message.text);
 
               ref
-                  .read(messageProvider(symptomOccurrenceId).notifier)
+                  .read(messageProvider(widget.symptomOccurrenceId).notifier)
                   .sendMessage(message.text);
             },
             showUserAvatars: false,

@@ -4,3 +4,4 @@ export 'comorbidity.dart';
 export 'special_condition.dart';
 export 'symptom.dart';
 export 'symptom_occurrence.dart';
+export 'probable_disease.dart';
