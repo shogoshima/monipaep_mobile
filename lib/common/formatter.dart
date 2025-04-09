@@ -12,3 +12,10 @@ String symptomFormatter(List<Symptom> sintomas) {
   final listaFormatada = sintomas.map((s) => '- ${s.name}').join('\n');
   return 'Sintomas sentidos:\n$listaFormatada';
 }
+
+int getWeekNumber(DateTime date) {
+  // ISO 8601 week date (week starts on Monday, first week has the first Thursday)
+  final formatter = DateFormat("w"); // "w" = week of the year
+  return int.parse(formatter.format(date));
+}
+

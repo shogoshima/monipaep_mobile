@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Patient {
 
- String get id; String get name; String get cpf; String get email; String get gender; String get phone; bool get allowSms; String? get workAddress; String get homeAddress; String get neighborhood; num get houseNumber; bool get hasHealthPlan; DateTime get birthdate; String get status; bool get activeAccount; List<Comorbidity> get comorbidities; List<SpecialCondition> get specialConditions;
+ String get id; String get name; String get cpf; String get email; String get gender; String get phone; DateTime get birthdate; String get cep; String get state; String get city; String get neighborhood; String get street; num get houseNumber; bool get allowSms; bool get hasHealthPlan; String get status; bool get activeAccount; List<Comorbidity> get comorbidities; List<SpecialCondition> get specialConditions;
 /// Create a copy of Patient
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $PatientCopyWith<Patient> get copyWith => _$PatientCopyWithImpl<Patient>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Patient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.cpf, cpf) || other.cpf == cpf)&&(identical(other.email, email) || other.email == email)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.allowSms, allowSms) || other.allowSms == allowSms)&&(identical(other.workAddress, workAddress) || other.workAddress == workAddress)&&(identical(other.homeAddress, homeAddress) || other.homeAddress == homeAddress)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.houseNumber, houseNumber) || other.houseNumber == houseNumber)&&(identical(other.hasHealthPlan, hasHealthPlan) || other.hasHealthPlan == hasHealthPlan)&&(identical(other.birthdate, birthdate) || other.birthdate == birthdate)&&(identical(other.status, status) || other.status == status)&&(identical(other.activeAccount, activeAccount) || other.activeAccount == activeAccount)&&const DeepCollectionEquality().equals(other.comorbidities, comorbidities)&&const DeepCollectionEquality().equals(other.specialConditions, specialConditions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Patient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.cpf, cpf) || other.cpf == cpf)&&(identical(other.email, email) || other.email == email)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.birthdate, birthdate) || other.birthdate == birthdate)&&(identical(other.cep, cep) || other.cep == cep)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.street, street) || other.street == street)&&(identical(other.houseNumber, houseNumber) || other.houseNumber == houseNumber)&&(identical(other.allowSms, allowSms) || other.allowSms == allowSms)&&(identical(other.hasHealthPlan, hasHealthPlan) || other.hasHealthPlan == hasHealthPlan)&&(identical(other.status, status) || other.status == status)&&(identical(other.activeAccount, activeAccount) || other.activeAccount == activeAccount)&&const DeepCollectionEquality().equals(other.comorbidities, comorbidities)&&const DeepCollectionEquality().equals(other.specialConditions, specialConditions));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,cpf,email,gender,phone,allowSms,workAddress,homeAddress,neighborhood,houseNumber,hasHealthPlan,birthdate,status,activeAccount,const DeepCollectionEquality().hash(comorbidities),const DeepCollectionEquality().hash(specialConditions));
+int get hashCode => Object.hashAll([runtimeType,id,name,cpf,email,gender,phone,birthdate,cep,state,city,neighborhood,street,houseNumber,allowSms,hasHealthPlan,status,activeAccount,const DeepCollectionEquality().hash(comorbidities),const DeepCollectionEquality().hash(specialConditions)]);
 
 @override
 String toString() {
-  return 'Patient(id: $id, name: $name, cpf: $cpf, email: $email, gender: $gender, phone: $phone, allowSms: $allowSms, workAddress: $workAddress, homeAddress: $homeAddress, neighborhood: $neighborhood, houseNumber: $houseNumber, hasHealthPlan: $hasHealthPlan, birthdate: $birthdate, status: $status, activeAccount: $activeAccount, comorbidities: $comorbidities, specialConditions: $specialConditions)';
+  return 'Patient(id: $id, name: $name, cpf: $cpf, email: $email, gender: $gender, phone: $phone, birthdate: $birthdate, cep: $cep, state: $state, city: $city, neighborhood: $neighborhood, street: $street, houseNumber: $houseNumber, allowSms: $allowSms, hasHealthPlan: $hasHealthPlan, status: $status, activeAccount: $activeAccount, comorbidities: $comorbidities, specialConditions: $specialConditions)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $PatientCopyWith<$Res>  {
   factory $PatientCopyWith(Patient value, $Res Function(Patient) _then) = _$PatientCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String cpf, String email, String gender, String phone, bool allowSms, String? workAddress, String homeAddress, String neighborhood, num houseNumber, bool hasHealthPlan, DateTime birthdate, String status, bool activeAccount, List<Comorbidity> comorbidities, List<SpecialCondition> specialConditions
+ String id, String name, String cpf, String email, String gender, String phone, DateTime birthdate, String cep, String state, String city, String neighborhood, String street, num houseNumber, bool allowSms, bool hasHealthPlan, String status, bool activeAccount, List<Comorbidity> comorbidities, List<SpecialCondition> specialConditions
 });
 
 
@@ -66,7 +66,7 @@ class _$PatientCopyWithImpl<$Res>
 
 /// Create a copy of Patient
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? cpf = null,Object? email = null,Object? gender = null,Object? phone = null,Object? allowSms = null,Object? workAddress = freezed,Object? homeAddress = null,Object? neighborhood = null,Object? houseNumber = null,Object? hasHealthPlan = null,Object? birthdate = null,Object? status = null,Object? activeAccount = null,Object? comorbidities = null,Object? specialConditions = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? cpf = null,Object? email = null,Object? gender = null,Object? phone = null,Object? birthdate = null,Object? cep = null,Object? state = null,Object? city = null,Object? neighborhood = null,Object? street = null,Object? houseNumber = null,Object? allowSms = null,Object? hasHealthPlan = null,Object? status = null,Object? activeAccount = null,Object? comorbidities = null,Object? specialConditions = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -74,14 +74,16 @@ as String,cpf: null == cpf ? _self.cpf : cpf // ignore: cast_nullable_to_non_nul
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,gender: null == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,allowSms: null == allowSms ? _self.allowSms : allowSms // ignore: cast_nullable_to_non_nullable
-as bool,workAddress: freezed == workAddress ? _self.workAddress : workAddress // ignore: cast_nullable_to_non_nullable
-as String?,homeAddress: null == homeAddress ? _self.homeAddress : homeAddress // ignore: cast_nullable_to_non_nullable
+as String,birthdate: null == birthdate ? _self.birthdate : birthdate // ignore: cast_nullable_to_non_nullable
+as DateTime,cep: null == cep ? _self.cep : cep // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,neighborhood: null == neighborhood ? _self.neighborhood : neighborhood // ignore: cast_nullable_to_non_nullable
+as String,street: null == street ? _self.street : street // ignore: cast_nullable_to_non_nullable
 as String,houseNumber: null == houseNumber ? _self.houseNumber : houseNumber // ignore: cast_nullable_to_non_nullable
-as num,hasHealthPlan: null == hasHealthPlan ? _self.hasHealthPlan : hasHealthPlan // ignore: cast_nullable_to_non_nullable
-as bool,birthdate: null == birthdate ? _self.birthdate : birthdate // ignore: cast_nullable_to_non_nullable
-as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as num,allowSms: null == allowSms ? _self.allowSms : allowSms // ignore: cast_nullable_to_non_nullable
+as bool,hasHealthPlan: null == hasHealthPlan ? _self.hasHealthPlan : hasHealthPlan // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,activeAccount: null == activeAccount ? _self.activeAccount : activeAccount // ignore: cast_nullable_to_non_nullable
 as bool,comorbidities: null == comorbidities ? _self.comorbidities : comorbidities // ignore: cast_nullable_to_non_nullable
 as List<Comorbidity>,specialConditions: null == specialConditions ? _self.specialConditions : specialConditions // ignore: cast_nullable_to_non_nullable
@@ -96,7 +98,7 @@ as List<SpecialCondition>,
 @JsonSerializable()
 
 class _Patient implements Patient {
-  const _Patient({required this.id, required this.name, required this.cpf, required this.email, required this.gender, required this.phone, required this.allowSms, this.workAddress, required this.homeAddress, required this.neighborhood, required this.houseNumber, required this.hasHealthPlan, required this.birthdate, required this.status, required this.activeAccount, required final  List<Comorbidity> comorbidities, required final  List<SpecialCondition> specialConditions}): _comorbidities = comorbidities,_specialConditions = specialConditions;
+  const _Patient({required this.id, required this.name, required this.cpf, required this.email, required this.gender, required this.phone, required this.birthdate, required this.cep, required this.state, required this.city, required this.neighborhood, required this.street, required this.houseNumber, required this.allowSms, required this.hasHealthPlan, required this.status, required this.activeAccount, required final  List<Comorbidity> comorbidities, required final  List<SpecialCondition> specialConditions}): _comorbidities = comorbidities,_specialConditions = specialConditions;
   factory _Patient.fromJson(Map<String, dynamic> json) => _$PatientFromJson(json);
 
 @override final  String id;
@@ -105,13 +107,15 @@ class _Patient implements Patient {
 @override final  String email;
 @override final  String gender;
 @override final  String phone;
-@override final  bool allowSms;
-@override final  String? workAddress;
-@override final  String homeAddress;
-@override final  String neighborhood;
-@override final  num houseNumber;
-@override final  bool hasHealthPlan;
 @override final  DateTime birthdate;
+@override final  String cep;
+@override final  String state;
+@override final  String city;
+@override final  String neighborhood;
+@override final  String street;
+@override final  num houseNumber;
+@override final  bool allowSms;
+@override final  bool hasHealthPlan;
 @override final  String status;
 @override final  bool activeAccount;
  final  List<Comorbidity> _comorbidities;
@@ -142,16 +146,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Patient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.cpf, cpf) || other.cpf == cpf)&&(identical(other.email, email) || other.email == email)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.allowSms, allowSms) || other.allowSms == allowSms)&&(identical(other.workAddress, workAddress) || other.workAddress == workAddress)&&(identical(other.homeAddress, homeAddress) || other.homeAddress == homeAddress)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.houseNumber, houseNumber) || other.houseNumber == houseNumber)&&(identical(other.hasHealthPlan, hasHealthPlan) || other.hasHealthPlan == hasHealthPlan)&&(identical(other.birthdate, birthdate) || other.birthdate == birthdate)&&(identical(other.status, status) || other.status == status)&&(identical(other.activeAccount, activeAccount) || other.activeAccount == activeAccount)&&const DeepCollectionEquality().equals(other._comorbidities, _comorbidities)&&const DeepCollectionEquality().equals(other._specialConditions, _specialConditions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Patient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.cpf, cpf) || other.cpf == cpf)&&(identical(other.email, email) || other.email == email)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.birthdate, birthdate) || other.birthdate == birthdate)&&(identical(other.cep, cep) || other.cep == cep)&&(identical(other.state, state) || other.state == state)&&(identical(other.city, city) || other.city == city)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.street, street) || other.street == street)&&(identical(other.houseNumber, houseNumber) || other.houseNumber == houseNumber)&&(identical(other.allowSms, allowSms) || other.allowSms == allowSms)&&(identical(other.hasHealthPlan, hasHealthPlan) || other.hasHealthPlan == hasHealthPlan)&&(identical(other.status, status) || other.status == status)&&(identical(other.activeAccount, activeAccount) || other.activeAccount == activeAccount)&&const DeepCollectionEquality().equals(other._comorbidities, _comorbidities)&&const DeepCollectionEquality().equals(other._specialConditions, _specialConditions));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,cpf,email,gender,phone,allowSms,workAddress,homeAddress,neighborhood,houseNumber,hasHealthPlan,birthdate,status,activeAccount,const DeepCollectionEquality().hash(_comorbidities),const DeepCollectionEquality().hash(_specialConditions));
+int get hashCode => Object.hashAll([runtimeType,id,name,cpf,email,gender,phone,birthdate,cep,state,city,neighborhood,street,houseNumber,allowSms,hasHealthPlan,status,activeAccount,const DeepCollectionEquality().hash(_comorbidities),const DeepCollectionEquality().hash(_specialConditions)]);
 
 @override
 String toString() {
-  return 'Patient(id: $id, name: $name, cpf: $cpf, email: $email, gender: $gender, phone: $phone, allowSms: $allowSms, workAddress: $workAddress, homeAddress: $homeAddress, neighborhood: $neighborhood, houseNumber: $houseNumber, hasHealthPlan: $hasHealthPlan, birthdate: $birthdate, status: $status, activeAccount: $activeAccount, comorbidities: $comorbidities, specialConditions: $specialConditions)';
+  return 'Patient(id: $id, name: $name, cpf: $cpf, email: $email, gender: $gender, phone: $phone, birthdate: $birthdate, cep: $cep, state: $state, city: $city, neighborhood: $neighborhood, street: $street, houseNumber: $houseNumber, allowSms: $allowSms, hasHealthPlan: $hasHealthPlan, status: $status, activeAccount: $activeAccount, comorbidities: $comorbidities, specialConditions: $specialConditions)';
 }
 
 
@@ -162,7 +166,7 @@ abstract mixin class _$PatientCopyWith<$Res> implements $PatientCopyWith<$Res> {
   factory _$PatientCopyWith(_Patient value, $Res Function(_Patient) _then) = __$PatientCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String cpf, String email, String gender, String phone, bool allowSms, String? workAddress, String homeAddress, String neighborhood, num houseNumber, bool hasHealthPlan, DateTime birthdate, String status, bool activeAccount, List<Comorbidity> comorbidities, List<SpecialCondition> specialConditions
+ String id, String name, String cpf, String email, String gender, String phone, DateTime birthdate, String cep, String state, String city, String neighborhood, String street, num houseNumber, bool allowSms, bool hasHealthPlan, String status, bool activeAccount, List<Comorbidity> comorbidities, List<SpecialCondition> specialConditions
 });
 
 
@@ -179,7 +183,7 @@ class __$PatientCopyWithImpl<$Res>
 
 /// Create a copy of Patient
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? cpf = null,Object? email = null,Object? gender = null,Object? phone = null,Object? allowSms = null,Object? workAddress = freezed,Object? homeAddress = null,Object? neighborhood = null,Object? houseNumber = null,Object? hasHealthPlan = null,Object? birthdate = null,Object? status = null,Object? activeAccount = null,Object? comorbidities = null,Object? specialConditions = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? cpf = null,Object? email = null,Object? gender = null,Object? phone = null,Object? birthdate = null,Object? cep = null,Object? state = null,Object? city = null,Object? neighborhood = null,Object? street = null,Object? houseNumber = null,Object? allowSms = null,Object? hasHealthPlan = null,Object? status = null,Object? activeAccount = null,Object? comorbidities = null,Object? specialConditions = null,}) {
   return _then(_Patient(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -187,14 +191,16 @@ as String,cpf: null == cpf ? _self.cpf : cpf // ignore: cast_nullable_to_non_nul
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,gender: null == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,allowSms: null == allowSms ? _self.allowSms : allowSms // ignore: cast_nullable_to_non_nullable
-as bool,workAddress: freezed == workAddress ? _self.workAddress : workAddress // ignore: cast_nullable_to_non_nullable
-as String?,homeAddress: null == homeAddress ? _self.homeAddress : homeAddress // ignore: cast_nullable_to_non_nullable
+as String,birthdate: null == birthdate ? _self.birthdate : birthdate // ignore: cast_nullable_to_non_nullable
+as DateTime,cep: null == cep ? _self.cep : cep // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,neighborhood: null == neighborhood ? _self.neighborhood : neighborhood // ignore: cast_nullable_to_non_nullable
+as String,street: null == street ? _self.street : street // ignore: cast_nullable_to_non_nullable
 as String,houseNumber: null == houseNumber ? _self.houseNumber : houseNumber // ignore: cast_nullable_to_non_nullable
-as num,hasHealthPlan: null == hasHealthPlan ? _self.hasHealthPlan : hasHealthPlan // ignore: cast_nullable_to_non_nullable
-as bool,birthdate: null == birthdate ? _self.birthdate : birthdate // ignore: cast_nullable_to_non_nullable
-as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as num,allowSms: null == allowSms ? _self.allowSms : allowSms // ignore: cast_nullable_to_non_nullable
+as bool,hasHealthPlan: null == hasHealthPlan ? _self.hasHealthPlan : hasHealthPlan // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,activeAccount: null == activeAccount ? _self.activeAccount : activeAccount // ignore: cast_nullable_to_non_nullable
 as bool,comorbidities: null == comorbidities ? _self._comorbidities : comorbidities // ignore: cast_nullable_to_non_nullable
 as List<Comorbidity>,specialConditions: null == specialConditions ? _self._specialConditions : specialConditions // ignore: cast_nullable_to_non_nullable
