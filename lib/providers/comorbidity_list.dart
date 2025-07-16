@@ -11,11 +11,11 @@ class ComorbidityList extends _$ComorbidityList {
     final apiClient = ref.watch(apiClientProvider);
     final json = await apiClient.get(ApiRoutes.comorbidities);
 
-    if (json['comorbidityList'] == null) {
+    if (json['comorbidities'] == null) {
       return [];
     }
 
-    return (json['comorbidityList'] as List)
+    return (json['comorbidities'] as List)
         .map((e) => Comorbidity.fromJson(e as Map<String, dynamic>))
         .toList();
   }

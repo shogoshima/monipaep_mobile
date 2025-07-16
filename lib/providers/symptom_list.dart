@@ -13,11 +13,11 @@ class SymptomList extends _$SymptomList {
 
     final json = await apiClient.get(ApiRoutes.symptom);
 
-    if (json['symptomsList'] == null) {
+    if (json['symptoms'] == null) {
       return [];
     }
 
-    return (json['symptomsList'] as List)
+    return (json['symptoms'] as List)
         .map((e) => Symptom.fromJson(e as Map<String, dynamic>))
         .toList();
   }

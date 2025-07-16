@@ -19,13 +19,19 @@ class Profile extends _$Profile {
 
   Future<void> alter(Map<String, dynamic> updateData) async {
     final apiClient = ref.read(apiClientProvider);
-    final json = await apiClient.put(ApiRoutes.alter, updateData);
 
-    if (json['patient'] == null) {
-      return;
+    state = AsyncValue.loading();
+    try {
+      final json = await apiClient.put(ApiRoutes.alter, updateData);
+
+      if (json['patient'] == null) {
+        return;
+      }
+
+      Patient patient = Patient.fromJson(json['patient']);
+      state = AsyncData(patient);
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
-
-    Patient patient = Patient.fromJson(json['patient']);
-    state = AsyncData(patient);
   }
 }

@@ -7,7 +7,7 @@ part of 'special_condition_list.dart';
 // **************************************************************************
 
 String _$specialConditionListHash() =>
-    r'2ee950d984607fadb4fe8996c4bd937f118a2388';
+    r'12410d43f1eab053641355746f1a6688f15fc089';
 
 /// See also [SpecialConditionList].
 @ProviderFor(SpecialConditionList)

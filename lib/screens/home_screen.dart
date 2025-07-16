@@ -28,9 +28,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _onDestinationSelected(int index) {
-    setState(() {
-      _currentPageIndex = index;
-    });
     _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),

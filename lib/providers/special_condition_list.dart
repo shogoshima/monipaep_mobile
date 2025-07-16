@@ -11,11 +11,11 @@ class SpecialConditionList extends _$SpecialConditionList {
     final apiClient = ref.watch(apiClientProvider);
     final json = await apiClient.get(ApiRoutes.specialConditions);
 
-    if (json['specialConditionList'] == null) {
+    if (json['specialConditions'] == null) {
       return [];
     }
 
-    return (json['specialConditionList'] as List)
+    return (json['specialConditions'] as List)
         .map((e) => SpecialCondition.fromJson(e as Map<String, dynamic>))
         .toList();
   }

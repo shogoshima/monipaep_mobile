@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:monipaep_mobile/models/models.dart';
+import 'package:monipaep_mobile/providers/auth.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -206,19 +207,21 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           if (value.length == 9) {
                             FocusScope.of(context).unfocus();
                             final cep = value.replaceAll('-', '');
-                            final response = await http.get(
-                              Uri.parse('https://viacep.com.br/ws/$cep/json/'),
-                            );
-                            if (response.statusCode == 200) {
-                              final Map<String, dynamic> json = jsonDecode(
-                                response.body,
+                            try {
+                              final response = await http.get(
+                                Uri.parse(
+                                  'https://brasilapi.com.br/api/cep/v2/$cep',
+                                ),
+                              );
+                              final Brasilapi data = Brasilapi.fromJson(
+                                jsonDecode(response.body),
                               );
                               // Parse the JSON data and update the address fields
-                              _streetController.text = json['logradouro'];
-                              _neighborhoodController.text = json['bairro'];
-                              _cityController.text = json['localidade'];
-                              _stateController.text = json['uf'];
-                            } else {
+                              _streetController.text = data.street;
+                              _neighborhoodController.text = data.neighborhood;
+                              _cityController.text = data.city;
+                              _stateController.text = data.state;
+                            } catch (e) {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -230,28 +233,24 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         },
                       ),
                       TextFormField(
-                        enabled: false,
                         controller: _stateController,
                         decoration: const InputDecoration(
                           labelText: 'Estado *',
                         ),
                       ),
                       TextFormField(
-                        enabled: false,
                         controller: _cityController,
                         decoration: const InputDecoration(
                           labelText: 'Cidade *',
                         ),
                       ),
                       TextFormField(
-                        enabled: false,
                         controller: _neighborhoodController,
                         decoration: const InputDecoration(
                           labelText: 'Bairro *',
                         ),
                       ),
                       TextFormField(
-                        enabled: false,
                         controller: _streetController,
                         decoration: const InputDecoration(labelText: 'Rua *'),
                       ),
@@ -279,8 +278,30 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             // Process the data
+                            ref
+                                .read(authProvider.notifier)
+                                .signup(
+                                  _nameController.text,
+                                  _cpfController.text,
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  _genderController.text,
+                                  _phoneController.text,
+                                  _birthdateController.text,
+                                  _zipCodeController.text,
+                                  _stateController.text,
+                                  _cityController.text,
+                                  _neighborhoodController.text,
+                                  _streetController.text,
+                                  _numberController.text,
+                                  false,
+                                  false,
+                                );
+
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processando...')),
+                              const SnackBar(
+                                content: Text('Conta criada com sucesso!'),
+                              ),
                             );
                           }
                         },

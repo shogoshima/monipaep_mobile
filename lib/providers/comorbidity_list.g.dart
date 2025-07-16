@@ -6,7 +6,7 @@ part of 'comorbidity_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$comorbidityListHash() => r'e3e896b81ec0ceac96f9307bc6bf4856ab99755d';
+String _$comorbidityListHash() => r'ece822fc7df30241879c75b87dd11b568577ab62';
 
 /// See also [ComorbidityList].
 @ProviderFor(ComorbidityList)

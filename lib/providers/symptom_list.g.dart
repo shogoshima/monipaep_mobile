@@ -6,7 +6,7 @@ part of 'symptom_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$symptomListHash() => r'17124fda048165588d1a43186f80b507ab67381a';
+String _$symptomListHash() => r'48fcac5c6e6f9693af908aff3e51a863afdc9ff2';
 
 /// See also [SymptomList].
 @ProviderFor(SymptomList)

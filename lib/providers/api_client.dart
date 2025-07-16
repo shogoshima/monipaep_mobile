@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 // Necessary for code-generation to work
 part 'api_client.g.dart';
 
-const String baseUrl = 'http://192.168.15.6:3333';
+const String baseUrl = 'http://10.0.2.2:3333';
 
 class ApiRoutes {
   static String signup = '/patients/signup';
@@ -51,6 +51,12 @@ class ApiClient extends _$ApiClient {
 
   Future<void> removeRefreshToken() async {
     await _storage.delete(key: 'refreshToken');
+  }
+
+  Future<bool> isLoggedIn() async {
+    final accessToken = await _storage.containsKey(key: 'accessToken');
+    final refreshToken = await _storage.containsKey(key: 'refreshToken');
+    return accessToken && refreshToken;
   }
 
   Future<dynamic> get(String endpoint, [Map<String, dynamic>? query]) async {

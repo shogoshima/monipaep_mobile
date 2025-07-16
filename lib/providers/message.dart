@@ -45,21 +45,25 @@ class Message extends _$Message {
   Future<void> sendMessage(String message) async {
     final apiClient = ref.read(apiClientProvider);
 
-    final json = await apiClient.post(ApiRoutes.chat, {
-      'text': message,
-      'symptomOccurrenceId': _symptomOccurrenceId,
-    });
+    state = AsyncValue.loading();
+    try {
+      final json = await apiClient.post(ApiRoutes.chat, {
+        'text': message,
+        'symptomOccurrenceId': _symptomOccurrenceId,
+      });
 
-    if (json['chatMessage'] == null) {
-      throw Exception('Error sending message');
+      if (json['chatMessage'] == null) {
+        throw Exception('Error sending message');
+      }
+
+      final chatMessage = ChatMessage.fromJson(json['chatMessage']);
+
+      _symptomOccurrenceId = chatMessage.symptomOccurrenceId;
+
+      state = AsyncData([chatMessage, ...state.value ?? []]);
+      ref.invalidate(occurrenceProvider);
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
-
-    final chatMessage = ChatMessage.fromJson(json['chatMessage']);
-
-    _symptomOccurrenceId = chatMessage.symptomOccurrenceId;
-
-    state = AsyncData([chatMessage, ...state.value ?? []]);
-
-    ref.invalidate(occurrenceProvider);
   }
 }

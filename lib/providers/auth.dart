@@ -13,6 +13,11 @@ class Auth extends _$Auth {
   Future<Patient?> build() async {
     final apiClient = ref.watch(apiClientProvider);
 
+    final isLoggedIn = await apiClient.isLoggedIn();
+    if (!isLoggedIn) {
+      return null; // User is not logged in
+    }
+
     final json = await apiClient.get(ApiRoutes.me);
 
     if (json == null) {
@@ -26,22 +31,74 @@ class Auth extends _$Auth {
 
   // This method is used to log in the user
   Future<void> login(String cpf, String password) async {
-    // It is better to use ref.read here instead of ref.watch
-    // because we don't want to listen to the changes of the apiClientProvider
     final apiClient = ref.read(apiClientProvider);
 
-    // The POST request will return a Patient matching the new application state
-    final json = await apiClient.post(ApiRoutes.login, {
-      'cpf': cpf,
-      'password': password,
-    });
+    state = const AsyncValue.loading();
+    try {
+      // The POST request will return a Patient matching the new application state
+      final json = await apiClient.post(ApiRoutes.login, {
+        'cpf': cpf,
+        'password': password,
+      });
 
-    // We update the local cache to match the new state.
-    // This will notify all listeners.
-    await apiClient.setAccessToken(json['token']);
-    await apiClient.setRefreshToken(json['refreshToken']['id']);
+      // We update the local cache to match the new state.
+      // This will notify all listeners.
+      await apiClient.setAccessToken(json['token']);
+      await apiClient.setRefreshToken(json['refreshToken']['id']);
+      state = AsyncData(Patient.fromJson(json['patient']));
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
 
-    state = AsyncData(Patient.fromJson(json['patient']));
+  Future<void> signup(
+    String name,
+    String cpf,
+    String email,
+    String password,
+    String gender,
+    String phone,
+    String birthdate,
+    String cep,
+    String stateFrom,
+    String city,
+    String neighborhood,
+    String street,
+    String houseNumber,
+    bool hasHealthPlan,
+    bool allowSms,
+  ) async {
+    final apiClient = ref.read(apiClientProvider);
+
+    state = const AsyncValue.loading();
+    try {
+      final json = await apiClient.post(ApiRoutes.signup, {
+        'name': name,
+        'cpf': cpf,
+        'email': email,
+        'password': password,
+        'gender': gender,
+        'phone': phone,
+        'birthdate': birthdate,
+        'cep': cep,
+        'state': stateFrom,
+        'city': city,
+        'neighborhood': neighborhood,
+        'street': street,
+        'houseNumber': houseNumber,
+        'hasHealthPlan': hasHealthPlan,
+        'allowSms': allowSms,
+      });
+
+      // We update the local cache to match the new state.
+      // This will notify all listeners.
+      await apiClient.setAccessToken(json['token']);
+      await apiClient.setRefreshToken(json['refreshToken']['id']);
+
+      state = AsyncData(Patient.fromJson(json['patient']));
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
   }
 
   // This method is used to log out the user

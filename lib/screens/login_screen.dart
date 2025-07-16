@@ -25,6 +25,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -79,22 +81,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: const Text('Esqueci minha senha'),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      ref
-                          .read(authProvider.notifier)
-                          .login('123.456.789-00', 'Password@123');
-                      // if (_formKey.currentState!.validate()) {
-                      //   log(
-                      //     'Login: ${_cpfController.text} ${_passwordController.text}',
-                      //   );
-                      //   ref
-                      //       .read(authProvider.notifier)
-                      //       .login(
-                      //         _cpfController.text,
-                      //         _passwordController.text,
-                      //       );
-                      // }
-                    },
+                    onPressed:
+                        authState.isLoading
+                            ? null
+                            : () {
+                              // ref
+                              //     .read(authProvider.notifier);
+                              // .login('123.456.789-00', 'Password@123');
+                              if (_formKey.currentState!.validate()) {
+                                ref
+                                    .read(authProvider.notifier)
+                                    .login(
+                                      _cpfController.text,
+                                      _passwordController.text,
+                                    );
+                              }
+                            },
                     child: const Text('Entrar'),
                   ),
                   const SizedBox(height: 20),
@@ -122,6 +124,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       ],
                     ),
+                  ),
+                  authState.when(
+                    data: (_) => const SizedBox.shrink(),
+                    loading: () => const SizedBox.shrink(),
+                    error:
+                        (err, _) => Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            err.toString(),
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
                   ),
                 ],
               ),

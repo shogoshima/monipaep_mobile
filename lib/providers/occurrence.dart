@@ -29,33 +29,39 @@ class Occurrence extends _$Occurrence {
   Future<void> delete(String id) async {
     final apiClient = ref.watch(apiClientProvider);
 
-    await apiClient.delete(ApiRoutes.symptomOccurrence, id);
-
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      return await build();
-    });
+    state = AsyncValue.loading();
+    try {
+      await apiClient.delete(ApiRoutes.symptomOccurrence, id);
+      ref.invalidateSelf();
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
   }
 
   Future<String?> analysis(List<String> symptomsIds) async {
     final apiClient = ref.read(apiClientProvider);
 
-    final json = await apiClient.post(ApiRoutes.analysis, {
-      'symptomIds': symptomsIds,
-    });
+    state = AsyncValue.loading();
+    try {
+      final json = await apiClient.post(ApiRoutes.analysis, {
+        'symptomIds': symptomsIds,
+      });
 
-    final SymptomOccurrence symptomOccurrence = SymptomOccurrence.fromJson(
-      json['symptomOccurrence'],
-    );
+      final SymptomOccurrence symptomOccurrence = SymptomOccurrence.fromJson(
+        json['symptomOccurrence'],
+      );
 
-    state = AsyncData([symptomOccurrence, ...state.value ?? []]);
+      state = AsyncData([symptomOccurrence, ...state.value ?? []]);
 
-    if (symptomOccurrence.chat) {
-      ref
-          .read(messageProvider(symptomOccurrence.id).notifier)
-          .sendMessage(symptomFormatter(symptomOccurrence.symptoms));
+      if (symptomOccurrence.chat) {
+        ref
+            .read(messageProvider(symptomOccurrence.id).notifier)
+            .sendMessage(symptomFormatter(symptomOccurrence.symptoms));
 
-      return symptomOccurrence.id;
+        return symptomOccurrence.id;
+      }
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
 
     return null;
