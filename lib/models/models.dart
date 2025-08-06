@@ -7,3 +7,5 @@ export 'symptom_occurrence.dart';
 export 'probable_disease.dart';
 export 'viacep.dart';
 export 'brasilapi.dart';
+export 'faq_group.dart';
+export 'faq.dart';

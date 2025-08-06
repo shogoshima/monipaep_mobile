@@ -26,7 +26,7 @@ class Auth extends _$Auth {
       return null;
     }
 
-    return Patient.fromJson(json);
+    return Patient.fromJson(json['patient']);
   }
 
   // This method is used to log in the user

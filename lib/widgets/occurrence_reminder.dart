@@ -12,95 +12,130 @@ class OccurrenceReminder extends ConsumerWidget {
     final AsyncValue<List<SymptomOccurrence>> occurrences = ref.watch(
       occurrenceProvider,
     );
+
     final daysSinceUpdate =
         occurrences.value?.isNotEmpty == true
             ? DateTime.now()
                 .difference(occurrences.value!.first.registeredDate)
                 .inDays
             : 0;
+
     return Column(
       children: [
         Card(
-          child: Column(
-            children: [
-              const ListTile(
-                title: Text(
-                  'Últimos Sintomas',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: 120,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: switch (occurrences) {
-                    AsyncData(:final value) => SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:
-                            value
-                                .take(3)
-                                .map(
-                                  (occurrence) => ListTile(
-                                    title: Text(
-                                      occurrence.symptoms.isEmpty
-                                          ? 'Sem sintomas'
-                                          : occurrence.symptoms
-                                              .map((symptom) => symptom.name)
-                                              .join(', '),
-                                    ),
-                                    subtitle: Text(
-                                      'Registrado em ${dateFormatter(occurrence.registeredDate)}',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
+          color: Theme.of(context).colorScheme.primaryContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Center(
+              child:
+                  occurrences.value?.isNotEmpty == true
+                      ? RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: 'Você está há ',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                          children: [
+                            TextSpan(
+                              text:
+                                  '$daysSinceUpdate ${daysSinceUpdate == 1 ? 'dia' : 'dias'}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            const TextSpan(text: ' sem registrar sintomas'),
+                          ],
+                        ),
+                      )
+                      : Text(
+                        'Você não possui sintomas registrados',
+                        style: const TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    AsyncError() => const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text('Erro ao carregar sintomas'),
-                    ),
-                    _ => const Center(child: CircularProgressIndicator()),
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-        const SizedBox(height: 8),
-        occurrences.value?.isNotEmpty == true
-            ? Text.rich(
-              TextSpan(
-                text: 'Você está há ',
-                style: const TextStyle(fontSize: 16),
-                children: [
-                  TextSpan(
-                    text:
-                        '$daysSinceUpdate ${daysSinceUpdate == 1 ? 'dia' : 'dias'}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent,
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 4,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.health_and_safety,
+                      color: Theme.of(context).primaryColor,
                     ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Últimos Sintomas Registrados',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 140,
+                  child: occurrences.when(
+                    data:
+                        (value) => ListView.separated(
+                          itemCount: value.take(3).length,
+                          separatorBuilder: (_, __) => const Divider(),
+                          itemBuilder: (context, index) {
+                            final occurrence = value[index];
+                            return ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.green,
+                              ),
+                              title: Text(
+                                occurrence.symptoms.isEmpty
+                                    ? 'Sem sintomas'
+                                    : occurrence.symptoms
+                                        .map((s) => s.name)
+                                        .join(', '),
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              subtitle: Text(
+                                dateFormatter(occurrence.registeredDate),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                    loading:
+                        () => const Center(child: CircularProgressIndicator()),
+                    error:
+                        (_, __) => const Center(
+                          child: Text('Erro ao carregar sintomas'),
+                        ),
                   ),
-                  const TextSpan(
-                    text: ' sem registrar sintomas',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.center,
-            )
-            : Text(
-              'Você não possui sintomas registrados',
-              style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
+                ),
+              ],
             ),
+          ),
+        ),
       ],
     );
   }

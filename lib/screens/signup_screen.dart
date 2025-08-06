@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/auth.dart';
+import 'package:monipaep_mobile/widgets/widgets.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -57,7 +60,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     type: MaskAutoCompletionType.lazy,
   );
   var stateFormatter = MaskTextInputFormatter(
-    mask: 'AA',
+    mask: '##',
     filter: {"#": RegExp(r'[A-Z]')},
     type: MaskAutoCompletionType.lazy,
   );
@@ -234,6 +237,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       TextFormField(
                         controller: _stateController,
+                        inputFormatters: [stateFormatter],
                         decoration: const InputDecoration(
                           labelText: 'Estado *',
                         ),
@@ -256,12 +260,17 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       TextFormField(
                         controller: _numberController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         decoration: const InputDecoration(
                           labelText: 'Número *',
                         ),
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value.contains(RegExp(r'[^\d]'))) {
                             return 'Digite o número da residência';
                           }
                           return null;
@@ -274,38 +283,48 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
+                      PrimaryButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             // Process the data
-                            ref
-                                .read(authProvider.notifier)
-                                .signup(
-                                  _nameController.text,
-                                  _cpfController.text,
-                                  _emailController.text,
-                                  _passwordController.text,
-                                  _genderController.text,
-                                  _phoneController.text,
-                                  _birthdateController.text,
-                                  _zipCodeController.text,
-                                  _stateController.text,
-                                  _cityController.text,
-                                  _neighborhoodController.text,
-                                  _streetController.text,
-                                  _numberController.text,
-                                  false,
-                                  false,
-                                );
+                            try {
+                              ref
+                                  .read(authProvider.notifier)
+                                  .signup(
+                                    _nameController.text,
+                                    _cpfController.text,
+                                    _emailController.text,
+                                    _passwordController.text,
+                                    _genderController.text,
+                                    _phoneController.text,
+                                    parseDate(_birthdateController.text).toIso8601String(),
+                                    _zipCodeController.text,
+                                    _stateController.text,
+                                    _cityController.text,
+                                    _neighborhoodController.text,
+                                    _streetController.text,
+                                    _numberController.text,
+                                    false,
+                                    false,
+                                  );
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Conta criada com sucesso!'),
-                              ),
-                            );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Conta criada com sucesso!'),
+                                ),
+                              );
+
+                              Navigator.pop(context);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Erro ao criar conta: $e'),
+                                ),
+                              );
+                            }
                           }
                         },
-                        child: const Text('Cadastrar'),
+                        label: 'Cadastrar',
                       ),
                     ],
                   ),

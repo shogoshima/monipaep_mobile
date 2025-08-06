@@ -1,7 +1,7 @@
-import 'package:monipaep_mobile/common/formatter.dart';
+import 'dart:developer';
+
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/api_client.dart';
-import 'package:monipaep_mobile/providers/message.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'occurrence.g.dart';
@@ -38,28 +38,56 @@ class Occurrence extends _$Occurrence {
     }
   }
 
-  Future<String?> analysis(List<String> symptomsIds) async {
+  Future<String?> create(List<Symptom> symptoms, String? remarks) async {
     final apiClient = ref.read(apiClientProvider);
 
     state = AsyncValue.loading();
     try {
-      final json = await apiClient.post(ApiRoutes.analysis, {
-        'symptomIds': symptomsIds,
+      final json = await apiClient.post(ApiRoutes.symptomOccurrence, {
+        'symptoms': symptoms.toList(),
+        'remarks': remarks,
       });
+
+      log(json.toString());
 
       final SymptomOccurrence symptomOccurrence = SymptomOccurrence.fromJson(
         json['symptomOccurrence'],
       );
 
       state = AsyncData([symptomOccurrence, ...state.value ?? []]);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
 
-      if (symptomOccurrence.chat) {
-        ref
-            .read(messageProvider(symptomOccurrence.id).notifier)
-            .sendMessage(symptomFormatter(symptomOccurrence.symptoms));
+    return null;
+  }
 
-        return symptomOccurrence.id;
+  Future<String?> getAnalysis(String symptomOccurrenceId) async {
+    final apiClient = ref.read(apiClientProvider);
+
+    state = AsyncValue.loading();
+    try {
+      final json = await apiClient.get(
+        '${ApiRoutes.symptomOccurrence}/$symptomOccurrenceId/analysis',
+      );
+      log(json.toString());
+
+      final SymptomOccurrence symptomOccurrence = SymptomOccurrence.fromJson(
+        json['symptomOccurrence'],
+      );
+
+      // update existing occurrence inside the list
+      final occurrences = state.value ?? [];
+      final index = occurrences.indexWhere(
+        (occ) => occ.id == symptomOccurrence.id,
+      );
+      if (index != -1) {
+        occurrences[index] = symptomOccurrence;
+      } else {
+        occurrences.add(symptomOccurrence);
       }
+
+      state = AsyncData(occurrences);
     } catch (e, st) {
       state = AsyncError(e, st);
     }

@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/info_dengue.dart';
-import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/models/viacep.dart';
-import 'package:monipaep_mobile/providers/api_client.dart';
 import 'package:monipaep_mobile/providers/profile.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

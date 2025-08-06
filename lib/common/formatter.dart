@@ -6,6 +6,11 @@ String dateFormatter(DateTime date) {
   return formatter.format(date);
 }
 
+DateTime parseDate(String date) {
+  final DateFormat formatter = DateFormat('dd/MM/yyyy');
+  return formatter.parse(date);
+}
+
 String symptomFormatter(List<Symptom> sintomas) {
   if (sintomas.isEmpty) return 'Sintomas sentidos: nenhum';
 

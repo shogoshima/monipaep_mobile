@@ -35,6 +35,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  void _onDestinationSelectedWide(int index) {
+    setState(() {
+      _currentPageIndex = index;
+    });
+    _pageController.jumpToPage(index);
+  }
+
   // When the user swipes, update the selected index
   void _onPageChanged(int index) {
     setState(() {
@@ -73,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           if (wideScreen) // Mostrando a barra lateral condicionalmente
             DisappearingNavigationRail(
               selectedIndex: _currentPageIndex,
-              onDestinationSelected: _onDestinationSelected,
+              onDestinationSelected: _onDestinationSelectedWide,
             ),
           Expanded(
             // Directly use the PageView to manage the pages.

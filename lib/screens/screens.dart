@@ -7,3 +7,4 @@ export 'health_screen.dart';
 export 'update_comorbidities_screen.dart';
 export 'update_special_conditions_screen.dart';
 export 'signup_screen.dart';
+export 'faq_screen.dart';

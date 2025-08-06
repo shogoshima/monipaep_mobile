@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/occurrence.dart';
-import 'package:monipaep_mobile/screens/chat_screen.dart';
 import 'package:monipaep_mobile/screens/symptoms_selection_screen.dart';
+import 'package:monipaep_mobile/widgets/buttons.dart';
 
 class OccurrencesScreen extends ConsumerStatefulWidget {
   const OccurrencesScreen({super.key});
@@ -106,7 +106,7 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
                                     Text(
                                       occurrence.remarks != null
                                           ? 'Observações: ${occurrence.remarks}'
-                                          : 'Não existem observações',
+                                          : 'Sem observações',
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -124,37 +124,49 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
                               ),
                               // Only allow navigation when not in edit mode
                               onTap:
-                                  occurrence.chat
-                                      ? _editMode
-                                          ? () {
-                                            setState(() {
-                                              if (isSelected) {
-                                                _selectedOccurrenceIds.remove(
-                                                  occurrence.id,
-                                                );
-                                              } else {
-                                                _selectedOccurrenceIds.add(
-                                                  occurrence.id,
-                                                );
-                                              }
-                                            });
-                                          }
-                                          : () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder:
-                                                    (context) => ChatScreen(
-                                                      symptomOccurrenceId:
-                                                          occurrence.id,
-                                                    ),
-                                              ),
+                                  _editMode
+                                      ? () {
+                                        setState(() {
+                                          if (isSelected) {
+                                            _selectedOccurrenceIds.remove(
+                                              occurrence.id,
+                                            );
+                                          } else {
+                                            _selectedOccurrenceIds.add(
+                                              occurrence.id,
                                             );
                                           }
-                                      : null,
+                                        });
+                                      }
+                                      : () {
+                                        ref
+                                            .read(occurrenceProvider.notifier)
+                                            .getAnalysis(occurrence.id);
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder:
+                                        //         (context) => ChatScreen(
+                                        //           symptomOccurrenceId:
+                                        //               occurrence.id,
+                                        //         ),
+                                        //   ),
+                                        // );
+                                      },
                               trailing:
-                                  !_editMode && occurrence.chat
-                                      ? const Icon(Icons.arrow_forward)
+                                  !_editMode
+                                      ? occurrence.instructions == null
+                                          ? const Icon(
+                                            Icons.priority_high,
+                                            color: Colors.red,
+                                          )
+                                          : Icon(
+                                            Icons.forward,
+                                            color:
+                                                Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                          )
                                       : null,
                             ),
                             const Divider(
@@ -181,7 +193,7 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
           !_editMode
               ? BottomAppBar(
                 color: Theme.of(context).colorScheme.surface,
-                child: ElevatedButton(
+                child: PrimaryButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -190,7 +202,7 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
                       ),
                     );
                   },
-                  child: const Text('Registrar novos sintomas'),
+                  label: 'Registrar novos sintomas',
                 ),
               )
               : null,

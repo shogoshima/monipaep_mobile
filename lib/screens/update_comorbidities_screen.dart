@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/comorbidity_list.dart';
 import 'package:monipaep_mobile/providers/profile.dart';
+import 'package:monipaep_mobile/widgets/buttons.dart';
 
 class UpdateComorbiditiesScreen extends ConsumerStatefulWidget {
   const UpdateComorbiditiesScreen({super.key});
@@ -23,7 +24,7 @@ class _UpdateComorbiditiesScreenState
     super.didChangeDependencies();
     final profile = ref.read(profileProvider).value;
     if (profile != null && selectedComorbidities.isEmpty) {
-      selectedComorbidities = List<Comorbidity>.from(profile.comorbidities);
+      selectedComorbidities = List<Comorbidity>.from(profile.comorbidities ?? []);
     }
   }
 
@@ -72,7 +73,7 @@ class _UpdateComorbiditiesScreenState
                   ),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
+                PrimaryButton(
                   onPressed: () {
                     log('Comorbidades selecionadas: $selectedComorbidities');
                     ref.read(profileProvider.notifier).alter({
@@ -89,7 +90,7 @@ class _UpdateComorbiditiesScreenState
 
                     Navigator.pop(context);
                   },
-                  child: const Text('Salvar'),
+                  label: 'Salvar',
                 ),
                 const SizedBox(height: 40),
               ],

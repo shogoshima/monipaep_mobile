@@ -14,8 +14,10 @@ class DashboardScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const CampaignCarousel(),
+            SizedBox(height: 8.0),
             const OccurrenceReminder(),
-            ElevatedButton(
+            SizedBox(height: 8.0),
+            PrimaryButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -24,18 +26,17 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Atualizar Sintomas'),
+              label: 'Atualizar Sintomas',
             ),
-            FilledButton(
+            SizedBox(height: 8.0),
+            SecondaryButton(
+              label: 'Perguntas Frequentes',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const OccurrencesScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const FaqScreen()),
                 );
               },
-              child: const Text('Perguntas Frequentes'),
             ),
           ],
         ),

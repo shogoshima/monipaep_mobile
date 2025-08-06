@@ -10,11 +10,14 @@ abstract class SymptomOccurrence with _$SymptomOccurrence {
     required String id,
     required String patientId,
     required List<Symptom> symptoms,
-    String? remarks,
-    String? diseaseOccurrenceId,
     required bool chat,
     required DateTime registeredDate,
     required List<ProbableDisease> probableDiseases,
+    required bool isPatientInRiskGroup,
+    String? remarks,
+    String? instructions,
+    String? referUSM,
+    String? diseaseOccurrenceId,
   }) = _SymptomOccurrence;
 
   factory SymptomOccurrence.fromJson(Map<String, Object?> json) =>

@@ -4,7 +4,7 @@ import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/occurrence.dart';
 import 'package:monipaep_mobile/providers/symptom_list.dart';
 import 'package:diacritic/diacritic.dart';
-import 'package:monipaep_mobile/screens/chat_screen.dart';
+import 'package:monipaep_mobile/widgets/buttons.dart';
 
 class SymptomsSelectionScreen extends ConsumerStatefulWidget {
   const SymptomsSelectionScreen({super.key});
@@ -17,6 +17,7 @@ class SymptomsSelectionScreen extends ConsumerStatefulWidget {
 class _SymptomsSelectionScreenState
     extends ConsumerState<SymptomsSelectionScreen> {
   List<Symptom> selectedSymptoms = [];
+  TextEditingController remarksController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Symptom>> symptoms = ref.watch(symptomListProvider);
@@ -152,36 +153,30 @@ class _SymptomsSelectionScreenState
             bottom: 24,
             right: 24,
             left: 24,
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              onPressed: () async {
-                if (selectedSymptoms.isNotEmpty) {
-                  showConfirmDialog(context, selectedSymptoms, () async {
-                    final occurrenceId = await ref
-                        .read(occurrenceProvider.notifier)
-                        .analysis(
-                          selectedSymptoms
-                              .map((symptom) => symptom.id)
-                              .toList(),
-                        );
+            child: PrimaryButton(
+              onPressed:
+                  selectedSymptoms.isEmpty
+                      ? null
+                      : () {
+                        if (selectedSymptoms.isNotEmpty) {
+                          showConfirmDialog(
+                            context,
+                            selectedSymptoms,
+                            remarksController,
+                            () {
+                              ref
+                                  .read(occurrenceProvider.notifier)
+                                  .create(
+                                    selectedSymptoms.toList(),
+                                    remarksController.text,
+                                  );
 
-                    if (!context.mounted) return;
-                    if (occurrenceId != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) =>
-                                  ChatScreen(symptomOccurrenceId: occurrenceId),
-                        ),
-                      );
-                    }
-                  });
-                }
-              },
-              child: const Text('Salvar'),
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
+                      },
+              label: 'Salvar',
             ),
           ),
         ],
@@ -193,6 +188,7 @@ class _SymptomsSelectionScreenState
 Future<void> showConfirmDialog(
   BuildContext context,
   List<Symptom> selectedSymptoms,
+  TextEditingController remarksController,
   VoidCallback onConfirm,
 ) async {
   return showDialog<void>(
@@ -200,46 +196,95 @@ Future<void> showConfirmDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(
-          'Confirmar sintomas',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 8,
+        titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+        contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        title: Row(
           children: [
-            Text(
-              style: TextStyle(fontStyle: FontStyle.italic),
-              'Caso precisemos de mais informações, você será redirecionado para o nosso chat',
-            ),
-            SizedBox(height: 10),
-            ...selectedSymptoms.map(
-              (e) => Text(
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                e.name,
+            Icon(Icons.info_outline, color: Theme.of(context).primaryColor),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Confirmar Sintomas',
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
           ],
         ),
-        actions: <Widget>[
-          Row(
-            mainAxisAlignment:
-                MainAxisAlignment
-                    .spaceBetween, // Distribute space between buttons
-            children: <Widget>[
-              TextButton(
-                child: const Text('Cancelar'),
-                onPressed: () => Navigator.of(context).pop(),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Sintomas selecionados:',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Colors.grey[700],
+                ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  onConfirm();
-                },
-                child: const Text('Enviar'),
+              const SizedBox(height: 8),
+              ...selectedSymptoms.map(
+                (symptom) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle,
+                        size: 20,
+                        color: Theme.of(context).highlightColor,
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          symptom.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(height: 24),
+              Text(
+                'Observações adicionais (opcional):',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Colors.grey[700],
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: remarksController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding: const EdgeInsets.all(12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  hintText: 'Digite suas observações aqui',
+                ),
               ),
             ],
+          ),
+        ),
+        actions: <Widget>[
+          TextActionButton(
+            label: 'Cancelar',
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          PrimaryButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirm();
+            },
+            label: 'Enviar',
           ),
         ],
       );

@@ -1,27 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'api_client.dart';
+part of 'faq_list.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$apiClientHash() => r'f11fece7904477dff5fcea5519e6ecbea0578b8c';
+String _$faqListHash() => r'95cea5d88cc0af60343368c2a2344ca64338cb67';
 
-/// See also [ApiClient].
-@ProviderFor(ApiClient)
-final apiClientProvider =
-    AutoDisposeNotifierProvider<ApiClient, ApiClient>.internal(
-      ApiClient.new,
-      name: r'apiClientProvider',
+/// See also [FaqList].
+@ProviderFor(FaqList)
+final faqListProvider =
+    AutoDisposeAsyncNotifierProvider<FaqList, List<FaqGroup>>.internal(
+      FaqList.new,
+      name: r'faqListProvider',
       debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$apiClientHash,
+          const bool.fromEnvironment('dart.vm.product') ? null : _$faqListHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$ApiClient = AutoDisposeNotifier<ApiClient>;
+typedef _$FaqList = AutoDisposeAsyncNotifier<List<FaqGroup>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/profile.dart';
 import 'package:monipaep_mobile/providers/special_condition_list.dart';
+import 'package:monipaep_mobile/widgets/buttons.dart';
 
 class UpdateSpecialConditionsScreen extends ConsumerStatefulWidget {
   const UpdateSpecialConditionsScreen({super.key});
@@ -22,7 +23,7 @@ class _UpdateComorbiditiesScreenState
     final profile = ref.read(profileProvider).value;
     if (profile != null && selectedSpecialConditions.isEmpty) {
       selectedSpecialConditions = List<SpecialCondition>.from(
-        profile.specialConditions,
+        profile.specialConditions ?? [],
       );
     }
   }
@@ -74,7 +75,7 @@ class _UpdateComorbiditiesScreenState
                   ),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
+                PrimaryButton(
                   onPressed: () {
                     ref.read(profileProvider.notifier).alter({
                       'specialConditions':
@@ -91,7 +92,7 @@ class _UpdateComorbiditiesScreenState
                     );
                     Navigator.pop(context);
                   },
-                  child: const Text('Salvar'),
+                  label: 'Salvar',
                 ),
                 const SizedBox(height: 40),
               ],

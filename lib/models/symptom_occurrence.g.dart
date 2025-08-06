@@ -14,14 +14,17 @@ _SymptomOccurrence _$SymptomOccurrenceFromJson(Map<String, dynamic> json) =>
           (json['symptoms'] as List<dynamic>)
               .map((e) => Symptom.fromJson(e as Map<String, dynamic>))
               .toList(),
-      remarks: json['remarks'] as String?,
-      diseaseOccurrenceId: json['diseaseOccurrenceId'] as String?,
       chat: json['chat'] as bool,
       registeredDate: DateTime.parse(json['registeredDate'] as String),
       probableDiseases:
           (json['probableDiseases'] as List<dynamic>)
               .map((e) => ProbableDisease.fromJson(e as Map<String, dynamic>))
               .toList(),
+      isPatientInRiskGroup: json['isPatientInRiskGroup'] as bool,
+      remarks: json['remarks'] as String?,
+      instructions: json['instructions'] as String?,
+      referUSM: json['referUSM'] as String?,
+      diseaseOccurrenceId: json['diseaseOccurrenceId'] as String?,
     );
 
 Map<String, dynamic> _$SymptomOccurrenceToJson(_SymptomOccurrence instance) =>
@@ -29,9 +32,12 @@ Map<String, dynamic> _$SymptomOccurrenceToJson(_SymptomOccurrence instance) =>
       'id': instance.id,
       'patientId': instance.patientId,
       'symptoms': instance.symptoms,
-      'remarks': instance.remarks,
-      'diseaseOccurrenceId': instance.diseaseOccurrenceId,
       'chat': instance.chat,
       'registeredDate': instance.registeredDate.toIso8601String(),
       'probableDiseases': instance.probableDiseases,
+      'isPatientInRiskGroup': instance.isPatientInRiskGroup,
+      'remarks': instance.remarks,
+      'instructions': instance.instructions,
+      'referUSM': instance.referUSM,
+      'diseaseOccurrenceId': instance.diseaseOccurrenceId,
     };

@@ -19,13 +19,13 @@ abstract class Patient with _$Patient {
     required String city,
     required String neighborhood,
     required String street,
-    required num houseNumber,
+    required String houseNumber,
     required bool allowSms,
     required bool hasHealthPlan,
-    required String status,
     required bool activeAccount,
-    required List<Comorbidity> comorbidities,
-    required List<SpecialCondition> specialConditions,
+    List<Comorbidity>? comorbidities,
+    List<SpecialCondition>? specialConditions,
+    required String status,
   }) = _Patient;
 
   factory Patient.fromJson(Map<String, Object?> json) =>
