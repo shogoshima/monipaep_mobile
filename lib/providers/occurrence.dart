@@ -62,36 +62,29 @@ class Occurrence extends _$Occurrence {
     return null;
   }
 
-  Future<String?> getAnalysis(String symptomOccurrenceId) async {
+  Future<List<Analysis>> getAnalysis(String symptomOccurrenceId) async {
     final apiClient = ref.read(apiClientProvider);
 
-    state = AsyncValue.loading();
+    List<Analysis> analyses = [];
     try {
       final json = await apiClient.get(
         '${ApiRoutes.symptomOccurrence}/$symptomOccurrenceId/analysis',
       );
       log(json.toString());
 
-      final SymptomOccurrence symptomOccurrence = SymptomOccurrence.fromJson(
-        json['symptomOccurrence'],
-      );
-
-      // update existing occurrence inside the list
-      final occurrences = state.value ?? [];
-      final index = occurrences.indexWhere(
-        (occ) => occ.id == symptomOccurrence.id,
-      );
-      if (index != -1) {
-        occurrences[index] = symptomOccurrence;
-      } else {
-        occurrences.add(symptomOccurrence);
+      if (json['output'] == null) {
+        return [];
       }
 
-      state = AsyncData(occurrences);
+      for (var analysisJson in json['output']) {
+        analyses.add(Analysis.fromJson(analysisJson));
+      }
+
+      return analyses;
     } catch (e, st) {
       state = AsyncError(e, st);
     }
 
-    return null;
+    return analyses;
   }
 }

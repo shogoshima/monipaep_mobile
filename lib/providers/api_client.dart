@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 // Necessary for code-generation to work
 part 'api_client.g.dart';
 
-const String baseUrl = 'http://192.168.15.5:3333';
+// const String baseUrl = 'http://192.168.15.6:3333/api';
+const String baseUrl = 'https://monipaep.icmc.usp.br/api';
 
 class ApiRoutes {
   static String signup = '/patients/signup';
@@ -21,6 +22,7 @@ class ApiRoutes {
   static String symptom = '/symptom';
   static String comorbidities = '/comorbidity';
   static String specialConditions = '/specialcondition';
+  static String usms = '/usm';
   static String faq = '/faqgroup';
 
   static String symptomOccurrence = '/symptomoccurrence';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:monipaep_mobile/common/show_dialog.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/occurrence.dart';
 import 'package:monipaep_mobile/providers/symptom_list.dart';
@@ -183,111 +184,4 @@ class _SymptomsSelectionScreenState
       ),
     );
   }
-}
-
-Future<void> showConfirmDialog(
-  BuildContext context,
-  List<Symptom> selectedSymptoms,
-  TextEditingController remarksController,
-  VoidCallback onConfirm,
-) async {
-  return showDialog<void>(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: 8,
-        titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-        contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        title: Row(
-          children: [
-            Icon(Icons.info_outline, color: Theme.of(context).primaryColor),
-            SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Confirmar Sintomas',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-          ],
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Sintomas selecionados:',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey[700],
-                ),
-              ),
-              const SizedBox(height: 8),
-              ...selectedSymptoms.map(
-                (symptom) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.check_circle,
-                        size: 20,
-                        color: Theme.of(context).highlightColor,
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          symptom.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Divider(height: 24),
-              Text(
-                'Observações adicionais (opcional):',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey[700],
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: remarksController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  isDense: true,
-                  contentPadding: const EdgeInsets.all(12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: 'Digite suas observações aqui',
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextActionButton(
-            label: 'Cancelar',
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          PrimaryButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              onConfirm();
-            },
-            label: 'Enviar',
-          ),
-        ],
-      );
-    },
-  );
 }

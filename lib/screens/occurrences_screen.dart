@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/occurrence.dart';
+import 'package:monipaep_mobile/screens/screens.dart';
 import 'package:monipaep_mobile/screens/symptoms_selection_screen.dart';
 import 'package:monipaep_mobile/widgets/buttons.dart';
 
@@ -138,10 +139,37 @@ class _OccurrencesScreenState extends ConsumerState<OccurrencesScreen> {
                                           }
                                         });
                                       }
-                                      : () {
-                                        ref
+                                      : () async {
+                                        final analyses = await ref
                                             .read(occurrenceProvider.notifier)
                                             .getAnalysis(occurrence.id);
+
+                                        if (!context.mounted) return;
+                                        if (analyses.isNotEmpty) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) =>
+                                                      OccurrenceAnalysisScreen(
+                                                        symptomOccurrenceId:
+                                                            occurrence.id,
+                                                        analyses: analyses,
+                                                      ),
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Os sintomas não indicaram grande risco no momento. '
+                                                'Por favor, registre novos sintomas caso necessário.',
+                                              ),
+                                            ),
+                                          );
+                                        }
                                         // Navigator.push(
                                         //   context,
                                         //   MaterialPageRoute(

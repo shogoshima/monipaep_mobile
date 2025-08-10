@@ -7,3 +7,4 @@ export 'comorbidities_card.dart';
 export 'special_conditions_card.dart';
 export 'status_card.dart';
 export 'buttons.dart';
+export 'last_occurrences_card.dart';

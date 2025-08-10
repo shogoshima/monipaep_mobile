@@ -6,7 +6,7 @@ part of 'occurrence.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$occurrenceHash() => r'365e9fc63da363729532d362c39d6df1498bde3b';
+String _$occurrenceHash() => r'1d8b58d2161a171fe3ef1043e9c19030ccd842c2';
 
 /// See also [Occurrence].
 @ProviderFor(Occurrence)

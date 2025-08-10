@@ -16,6 +16,7 @@ class ProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16.0),

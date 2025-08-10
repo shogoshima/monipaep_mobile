@@ -18,9 +18,17 @@ String symptomFormatter(List<Symptom> sintomas) {
   return 'Sintomas sentidos:\n$listaFormatada';
 }
 
-int getWeekNumber(DateTime date) {
-  // ISO 8601 week date (week starts on Monday, first week has the first Thursday)
-  final formatter = DateFormat("w"); // "w" = week of the year
-  return int.parse(formatter.format(date));
-}
+int getIsoWeekNumber(DateTime date) {
+  // Garantir que estamos lidando apenas com a data (sem hora)
+  final current = DateTime.utc(date.year, date.month, date.day);
 
+  // Ajustar para quinta-feira da semana atual
+  final dayOfWeek = current.weekday; // Monday=1 ... Sunday=7
+  final thursday = current.add(Duration(days: 4 - dayOfWeek));
+
+  // Começo do ano da quinta-feira
+  final firstThursday = DateTime.utc(thursday.year, 1, 4);
+
+  // Número da semana ISO
+  return ((thursday.difference(firstThursday).inDays) / 7).floor() + 1;
+}

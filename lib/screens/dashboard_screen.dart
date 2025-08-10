@@ -18,18 +18,15 @@ class DashboardScreen extends StatelessWidget {
             const OccurrenceReminder(),
             SizedBox(height: 8.0),
             PrimaryButton(
+              label: 'Unidades de Saúde Próximas',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const OccurrencesScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const UsmMapScreen()),
                 );
               },
-              label: 'Atualizar Sintomas',
             ),
-            SizedBox(height: 8.0),
-            SecondaryButton(
+            TextActionButton(
               label: 'Perguntas Frequentes',
               onPressed: () {
                 Navigator.push(

@@ -1,5 +1,4 @@
 export 'patient.dart';
-export 'chat_message.dart';
 export 'comorbidity.dart';
 export 'special_condition.dart';
 export 'symptom.dart';
@@ -9,3 +8,6 @@ export 'viacep.dart';
 export 'brasilapi.dart';
 export 'faq_group.dart';
 export 'faq.dart';
+export 'analysis.dart';
+export 'gpt_protocol_input.dart';
+export 'usm.dart';

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/models.dart';
 import 'package:monipaep_mobile/providers/occurrence.dart';
+import 'package:monipaep_mobile/screens/screens.dart';
+import 'package:monipaep_mobile/widgets/widgets.dart';
 
 class OccurrenceReminder extends ConsumerWidget {
   const OccurrenceReminder({super.key});
@@ -64,78 +66,101 @@ class OccurrenceReminder extends ConsumerWidget {
             ),
           ),
         ),
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 4,
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.health_and_safety,
-                      color: Theme.of(context).primaryColor,
+        occurrences.value?.isEmpty == true
+            ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PrimaryButton(
+                label: 'Registrar Sintomas',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const OccurrencesScreen(),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Últimos Sintomas Registrados',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                  );
+                },
+              ),
+            )
+            : GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OccurrencesScreen(),
+                  ),
+                );
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 140,
-                  child: occurrences.when(
-                    data:
-                        (value) => ListView.separated(
-                          itemCount: value.take(3).length,
-                          separatorBuilder: (_, __) => const Divider(),
-                          itemBuilder: (context, index) {
-                            final occurrence = value[index];
-                            return ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              leading: Icon(
-                                Icons.check_circle_outline,
-                                color: Colors.green,
-                              ),
-                              title: Text(
-                                occurrence.symptoms.isEmpty
-                                    ? 'Sem sintomas'
-                                    : occurrence.symptoms
-                                        .map((s) => s.name)
-                                        .join(', '),
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              subtitle: Text(
-                                dateFormatter(occurrence.registeredDate),
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black54,
+                elevation: 4,
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OccurrencesScreen(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.report,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Últimos Sintomas Registrados',
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          child: occurrences.when(
+                            data:
+                                (value) => ListTile(
+                                  title: Text(
+                                    value[0].symptoms.isEmpty
+                                        ? 'Sem sintomas'
+                                        : value[0].symptoms
+                                            .map((s) => s.name)
+                                            .join(', '),
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  subtitle: Text(
+                                    dateFormatter(value[0].registeredDate),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                            loading:
+                                () => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                            error:
+                                (_, __) => const Center(
+                                  child: Text('Erro ao carregar sintomas'),
+                                ),
+                          ),
                         ),
-                    loading:
-                        () => const Center(child: CircularProgressIndicator()),
-                    error:
-                        (_, __) => const Center(
-                          child: Text('Erro ao carregar sintomas'),
-                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
       ],
     );
   }

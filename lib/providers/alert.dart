@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:monipaep_mobile/common/formatter.dart';
 import 'package:monipaep_mobile/models/info_dengue.dart';
@@ -10,14 +9,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 // Necessary for code-generation to work
 part 'alert.g.dart';
 
-// This is the provider for the authentication state
-// It is a Notifier
 @riverpod
 class Alert extends _$Alert {
   @override
   Future<num?> build() async {
     final profile = ref.watch(profileProvider).value;
-
     if (profile == null) return null;
 
     final viacepResponse = await http.get(
@@ -29,23 +25,20 @@ class Alert extends _$Alert {
     }
 
     final viacepData = Viacep.fromJson(jsonDecode(viacepResponse.body));
-
     final now = DateTime.now();
-    final week = getWeekNumber(now);
+    final week = getIsoWeekNumber(now);
 
     final infoDengueResponse = await http.get(
       Uri.parse(
-        'https://info.dengue.mat.br/api/alertcity?geocode=${viacepData.ibge}&disease=dengue&format=csv&ew_start=$week&ew_end=$week&ey_start=${now.year}&ey_end=${now.year}',
+        'https://info.dengue.mat.br/api/alertcity?geocode=${viacepData.ibge}&disease=dengue&format=json&ew_start=$week&ew_end=$week&ey_start=${now.year}&ey_end=${now.year}',
       ),
     );
-
     if (viacepResponse.statusCode < 200 || viacepResponse.statusCode >= 300) {
       return null;
     }
 
-    final infoDengueData = InfoDengue.fromJson(
-      jsonDecode(infoDengueResponse.body),
-    );
+    final json = jsonDecode(infoDengueResponse.body);
+    final infoDengueData = InfoDengue.fromJson(json[0]);
 
     return infoDengueData.nivel;
   }

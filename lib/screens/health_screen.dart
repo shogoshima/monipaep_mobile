@@ -12,6 +12,7 @@ class HealthScreen extends StatelessWidget {
         child: const Column(
           children: [
             StatusCard(),
+            LastOccurrencesCard(),
             ComorbiditiesCard(),
             SpecialConditionsCard(),
           ],
